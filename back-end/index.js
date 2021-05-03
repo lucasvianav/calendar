@@ -3,7 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
 
-// const apiRouter = require('./routers')
+const apiRouter = require('./routers')
 const db = require('./connection')
 
 require('dotenv').config();
@@ -18,7 +18,7 @@ const corsOptions = {
     optionsSuccessStatus: 200,
 }
 app.use(cors(corsOptions))
-// app.use('/api', apiRouter)
+app.use('/api', apiRouter)
 
 db.on('error', console.error.bind(console, 'connection error:'))
 db.once('open', () => app.listen(process.env.SERVER_PORT, () => console.log(`Example app listening at http://localhost:` + process.env.SERVER_PORT)))
