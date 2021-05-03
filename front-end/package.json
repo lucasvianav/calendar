@@ -1,0 +1,10 @@
+{
+  "name": "calendar-front-end",
+  "version": "1.0.0",
+  "description": "Front-end for my Google Calendar clone",
+  "main": "index.js",
+  "repository": "https://github.com/lucasvianav/calendar",
+  "author": "Lucas Viana",
+  "license": "MIT",
+  "private": false
+}
