@@ -7,6 +7,7 @@ const eventSchema = mongoose.Schema({
     description: {
         type: string,
         trim: true,
+        default: '',
         required: true
     },
     startDate: {
@@ -22,12 +23,12 @@ const eventSchema = mongoose.Schema({
         min: new Date,
         required: true
     },
-    userId: {
+    creator: {
         type: mongoose.ObjectId,
         required: true
     },
     guests: {
-        type: [mongoose.ObjectId],
+        type: [{ '_id': mongoose.ObjectId, 'RSVP': Boolean }],
         default: [],
         required: true
     }
