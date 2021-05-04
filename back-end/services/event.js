@@ -218,12 +218,7 @@ const eventService = {
         return response
     },
 
-    // find: async (req, res) => { 
-    //     const {userId} = req.params
-    //     const account = await eventService.find(userId)
-
-    //     return account ? res.status(200).json(account) : res.status(404).json({})
-    // },
+    find: async (userId) => await Event.find({creator: userId}),
 
     // delete: async(req, res) => {
     //     const {userId, eventId} = req.params

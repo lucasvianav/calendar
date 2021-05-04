@@ -27,9 +27,10 @@ const eventController = {
 
     find: async (req, res) => { 
         const {userId} = req.params
-        const account = await eventService.find(userId)
+        const events = await eventService.find(userId)
 
-        return account ? res.status(200).json(account) : res.status(404).json({})
+        // if the list is empty, it means no events were found
+        return  res.status(events.length ? 200 : 404).json(events)
     },
 
     delete: async(req, res) => {
