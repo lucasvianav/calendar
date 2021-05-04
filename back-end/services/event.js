@@ -150,7 +150,7 @@ const eventService = {
 
 
             try {
-                const newEvent = Event.findByIdAndUpdate(eventId, { 
+                const newEvent = await Event.findByIdAndUpdate(eventId, { 
                     // updates non-list variables
                     $set: { ...updates.set }, 
 
@@ -159,7 +159,7 @@ const eventService = {
 
                     // removes guests from the array
                     $pull: { guests: { _id: { $in: updates.guests.remove } } }
-                })
+                }, { new: true })
                 const error = null
             } 
 
@@ -179,9 +179,44 @@ const eventService = {
         return {newEvent, error}
     },
 
-    // rsvp: async (guestId, eventId, bool) => {
-    //     // return res.status(response.status).json(response.json)
-    // },
+    rsvp: async (guestId, eventId, bool) => {
+        const targetEvent = await Event.findById(eventId)
+        
+        // searchs for a guest with this one's id
+        guest = targetEvent.guests.find(g => g._id == guestId)
+        
+        // if the user is a guest at that event
+        if(guest){
+            guest.RSVP = bool
+
+            try {
+                const response = {
+                    status: 200,
+                    json: await Event.findByIdAndUpdate(eventId, { $set: { guests: targetEvent.guests } }, { new: true })
+                }
+            } 
+
+            // if an error occurs, it means the received bool is not a Boolean
+            catch(e){
+                const response = {
+                    status: 400, // bad request
+                    json: { message: 'An error ocurred.' }
+                }
+
+                // logs error
+                console.log(e)
+            }
+        }
+        
+        else{
+            const response = {
+                status: 409,
+                json: { message: 'Unfortunately, this guest was not invited to this event.' }
+            }
+        }
+
+        return response
+    },
 
     // find: async (req, res) => { 
     //     const {userId} = req.params
