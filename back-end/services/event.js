@@ -176,12 +176,8 @@ const eventService = {
         return {newEvent, error}
     },
 
-    // rsvp: async (req, res) => {
-    //     const {guestId, eventId} = req.params
-    //     const {bool} = req.body
-    //     const respose = eventService.rsvp(guestId, eventId, bool)
-
-    //     return res.status(response.status).json(response.json)
+    // rsvp: async (guestId, eventId, bool) => {
+    //     // return res.status(response.status).json(response.json)
     // },
 
     // find: async (req, res) => { 

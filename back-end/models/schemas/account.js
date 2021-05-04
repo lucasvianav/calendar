@@ -1,3 +1,5 @@
+const mongoose = require('mongoose')
+
 const accountSchema = mongoose.Schema({
     name: {
         type: String,
@@ -14,3 +16,5 @@ const accountSchema = mongoose.Schema({
         required: true
     }
 })
+
+module.exports = accountSchema

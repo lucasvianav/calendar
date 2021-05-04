@@ -1,3 +1,5 @@
+const mongoose = require('mongoose')
+
 const eventSchema = mongoose.Schema({
     title: {
         type: string,
@@ -28,8 +30,10 @@ const eventSchema = mongoose.Schema({
         required: true
     },
     guests: {
-        type: [{ '_id': mongoose.ObjectId, 'RSVP': Boolean }],
+        type: [],
         default: [],
         required: true
     }
 })
+
+module.exports = eventSchema
