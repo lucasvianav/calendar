@@ -3,10 +3,10 @@ const eventService = require('../services/event')
 const eventController = {
     create: async (req, res) => {
         const {userId} = req.params
-        const {title, description, startDate, endDate, creator, guests} = req.body
-        const {event, error} = await eventService.create(userId, title, description, startDate, endDate, creator, guests)
+        const {title, description, startDate, endDate, guests} = req.body
+        const {event, error} = await eventService.create(title, description, startDate, endDate, userId, guests)
 
-        return event ? res.status(200).json(event) : res.status(error.code).json(error.message)
+        return event ? res.status(200).json(event) : res.status(error.status).json(error.json)
     },
 
     update: async(req, res) => {
