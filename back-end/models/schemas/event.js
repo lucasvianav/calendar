@@ -13,12 +13,12 @@ const guestSchema = mongoose.Schema({
 
 const eventSchema = mongoose.Schema({
     title: {
-        type: string,
+        type: String,
         trim: true,
         required: true
     },
     description: {
-        type: string,
+        type: String,
         trim: true,
         default: '',
         required: true
