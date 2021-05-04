@@ -1,5 +1,16 @@
 const mongoose = require('mongoose')
 
+const guestSchema = mongoose.Schema({
+    _id: {
+        type: mongoose.ObjectId,
+        required: true
+    },
+    RSVP: {
+        type: Boolean,
+        required: false
+    }
+})
+
 const eventSchema = mongoose.Schema({
     title: {
         type: string,
@@ -30,7 +41,7 @@ const eventSchema = mongoose.Schema({
         required: true
     },
     guests: {
-        type: [],
+        type: [guestSchema],
         default: [],
         required: true
     }
