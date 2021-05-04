@@ -3,8 +3,6 @@ const Account = require('../models/account')
 
 const eventService = {
     create: async (title, description, startDate, endDate, creator, guests) => {
-        const user = await Account.findById(creator)
-
         // list of existing events that orverlap with the one being created
         const overlaps = await Event.find({
             // makes sure the creator is the same
@@ -74,7 +72,6 @@ const eventService = {
     },
 
     update: async(userId, eventId, edits) => {
-        const user = await Account.findById(userId)
         const oldEvent = await Event.findById(eventId)
 
         // if the event's date is edited it's necessary to check again 
@@ -113,10 +110,6 @@ const eventService = {
             ]
         }, 'title startDate endDate')
 
-        if(edits.guests.length){
-            edits.guests = await Account.find({ email: { $in: guests } }, '_id')
-        }
-
         // if any overlap is found
         if(overlaps.length){
             const newEvent = null
@@ -127,18 +120,43 @@ const eventService = {
         }
 
         else{
-            try {
-                // const { title, description, startDate, endDate, guests } = edits
-                const updates = {}
-                if(edits.title){ updates.title = edits.title }
-                if(edits.description){ updates.description = edits.description }
-                if(edits.startDate){ updates.startDate = edits.startDate }
-                if(edits.endDate){ updates.endDate = edits.endDate }
-                if(edits.guests){ 
-                    updates.addGuests = edits.guests.filter(g => !oldEvent.guests.includes(g)) 
-                }
+            // if the guest list is to be edited, fetch the guests' id
+            if(edits.guests.length){
+                edits.guests = await Account.find({ email: { $in: guests } }, '_id')
+            }
 
-                const newEvent = Event.findByIdAndUpdate(eventId, {$set: {}})
+            const updates = { 
+                set: {}, // variable that'll have it's values changed
+                guests: { // list that'll be updated
+                    add: [], // guests that'll be added to the event
+                    remove: [] // guests that'll be removed from the event
+                }
+            }
+
+            if(edits.title){ updates.set.title = edits.title }
+            if(edits.description){ updates.set.description = edits.description }
+            if(edits.startDate){ updates.set.startDate = edits.startDate }
+            if(edits.endDate){ updates.set.endDate = edits.endDate }
+
+            // users that were added as guests will be removed
+            // and users that weren't will be added as guests
+            if(edits.guests){
+                updates.guests.add = edits.guests.filter(g => !oldEvent.guests.includes(g)) 
+                updates.guests.remove = edits.guests.filter(g => oldEvent.guests.includes(g)) 
+            }
+
+
+            try {
+                const newEvent = Event.findByIdAndUpdate(eventId, { 
+                    // updates non-list variables
+                    $set: { ...updates.set }, 
+
+                    // appends guests to the array
+                    $push: { guests: { $each: [ ...updates.guests.add ] } }, 
+
+                    // removes guests from the array
+                    $pullAll: { guests: [ ...updates.guests.remove ] } 
+                })
                 const error = null
             } 
 
@@ -156,28 +174,29 @@ const eventService = {
         }
 
         return {newEvent, error}
-
-    rsvp: async (req, res) => {
-        const {guestId, eventId} = req.params
-        const {bool} = req.body
-        const respose = eventService.rsvp(guestId, eventId, bool)
-
-        return res.status(response.status).json(response.json)
     },
 
-    find: async (req, res) => { 
-        const {userId} = req.params
-        const account = await eventService.find(userId)
+    // rsvp: async (req, res) => {
+    //     const {guestId, eventId} = req.params
+    //     const {bool} = req.body
+    //     const respose = eventService.rsvp(guestId, eventId, bool)
 
-        return account ? res.status(200).json(account) : res.status(404).json({})
-    },
+    //     return res.status(response.status).json(response.json)
+    // },
 
-    delete: async(req, res) => {
-        const {userId, eventId} = req.params
-        await eventService.delete(userId, eventId)
+    // find: async (req, res) => { 
+    //     const {userId} = req.params
+    //     const account = await eventService.find(userId)
 
-        return res.status(200).json({})
-    }
+    //     return account ? res.status(200).json(account) : res.status(404).json({})
+    // },
+
+    // delete: async(req, res) => {
+    //     const {userId, eventId} = req.params
+    //     await eventService.delete(userId, eventId)
+
+    //     return res.status(200).json({})
+    // }
 }
 
 module.exports = eventService
