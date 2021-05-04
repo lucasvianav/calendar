@@ -7,7 +7,7 @@ router.post('/:userId', eventController.create)
 
 router.put('/:userId/:eventId', eventController.update)
 
-router.put('/:guestId/:eventId', eventController.rsvp)
+router.put('/rsvp/:guestId/:eventId', eventController.rsvp)
 
 router.delete('/:userId/:eventId', eventController.delete)
 

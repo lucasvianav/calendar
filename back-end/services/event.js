@@ -3,6 +3,18 @@ const Account = require('../models/account')
 
 const eventService = {
     create: async (title, description, startDate, endDate, creator, guests) => {
+        // if the event is supposed to start in the past or it's 
+        // duration is lower than 5 minutes, it's invalid
+        if(new Date(startDate) < new Date() || new Date(endDate) - new Date(startDate) < 5*60*1000){
+            return {
+                newEvent: null,
+                error: {
+                    status: 400,
+                    json: { message: 'The event could not be created because it\'s dates are invalid. A new event cannot start in the past nor last less than 5 minutes.', overlaps: [] }
+                }
+            }
+        }
+
         // list of existing events that orverlap with the one being created
         const overlaps = await Event.find({
             // makes sure the creator is the same
@@ -36,6 +48,17 @@ const eventService = {
             ]
         }, 'title startDate endDate')
         
+        // if any overlap is found
+        if(overlaps.length){
+            return {
+                newEvent: null,
+                error: {
+                    status: 409, // conflict
+                    json: { message: 'The event could not be created because it overlaps with existing events.', overlaps }
+                }
+            }
+        }
+
         // if guests are invited, fetch their id from their emails
         // and creates a list of objects like the guestSchema with no RSVP
         // guests = [ { _id: guest_id } ]
@@ -43,39 +66,51 @@ const eventService = {
             guests = (await Account.find({ email: { $in: guests } }, '_id')).map(_id => ( { _id } ))
         }
 
-        // if any overlap is found
-        if(overlaps.length){
-            const newEvent = null
-            const error = {
-                status: 409, // conflict
-                json: { message: 'The event could not be created because it overlaps with existing events.', overlaps }
+        const returnValue = {}
+
+        try {
+            returnValue.newEvent = await Event.create({ title, description, startDate, endDate, creator, guests })
+            returnValue.error = null
+        } 
+
+        // if an error occurs, it means one of the event's fields if invalid
+        catch(e){
+            returnValue.newEvent = null
+            returnValue.error = {
+                status: 400, // bad request
+                json: { message: 'An error ocurred.', overlaps }
             }
+
+            // logs error
+            console.log(e)
         }
 
-        else{
-            try {
-                const newEvent = await Event.create({ title, description, startDate, endDate, creator, guests })
-                const error = null
-            } 
-
-            // if an error occurs, it means one of the event's fields if invalid
-            catch(e){
-                const newEvent = null
-                const error = {
-                    status: 400, // bad request
-                    json: { message: 'An error ocurred.', overlaps }
-                }
-
-                // logs error
-                console.log(e)
-            }
-        }
-
-        return {newEvent, error}
+        // same as { newEvent, error }
+        return returnValue
     },
 
     update: async(userId, eventId, edits) => {
         const oldEvent = await Event.findById(eventId)
+
+        // if the event is supposed to start in the past or it's 
+        // duration is lower than 5 minutes, it's invalid
+        // edits.startDate || oldEvent.startDate --> the new date or the old one if there's no new date
+        // edits.endDate || oldEvent.endDate --> the new date or the old one if there's no new date
+        if(
+            (edits.startDate || edits.endDate) &&
+            (
+                new Date(edits.startDate || oldEvent.startDate) < new Date() || 
+                new Date(edits.endDate || oldEvent.endDate) - new Date(edits.startDate || oldEvent.startDate) < 5*60*1000
+            )
+        ){
+            return {
+                newEvent: null,
+                error: {
+                    status: 400,
+                    json: { message: 'The event could not be created because it\'s dates are invalid. A new event cannot start in the past nor last less than 5 minutes.', overlaps: [] }
+                }
+            }
+        }
 
         // if the event's date is edited it's necessary to check again 
         // for overlapping events. if it isn't, there'll be none
@@ -84,8 +119,6 @@ const eventService = {
             creator: userId, 
 
             // overlapping possibilities considering the event's new dates
-            // edits.startDate || oldEvent.startDate --> the new date or the old one if there's no new date
-            // edits.endDate || oldEvent.endDate --> the new date or the old one if there's no new date
             $or: [ 
                 // starts at the same time or in the middle of an already existing event
                 { 
@@ -112,11 +145,13 @@ const eventService = {
                 }
             ]
         }, 'title startDate endDate')
+        
+        const returnValue = {}
 
         // if any overlap is found
         if(overlaps.length){
-            const newEvent = null
-            const error = {
+            returnValue.newEvent = null
+            returnValue.error = {
                 status: 409, // conflict
                 json: { message: 'The event could not be edited because it would overlap with other events.', overlaps }
             }
@@ -124,7 +159,7 @@ const eventService = {
 
         else{
             // if the guest list is to be edited, fetch the guests' id
-            if(edits.guests.length){
+            if(edits.guests && edits.guests.length){
                 edits.guests = await Account.find({ email: { $in: guests } }, '_id')
             }
 
@@ -143,30 +178,51 @@ const eventService = {
 
             // users that were added as guests will be removed
             // and users that weren't will be added as guests
-            if(edits.guests){
+            if(edits.guests && edits.guests.length){
                 updates.guests.add = edits.guests.filter(_id => !oldEvent.guests.any(g => g._id == _id)).map(_id => ( { _id } )) 
                 updates.guests.remove = edits.guests.filter(_id => oldEvent.guests.any(g => g._id == _id))
             }
 
 
             try {
-                const newEvent = await Event.findByIdAndUpdate(eventId, { 
-                    // updates non-list variables
-                    $set: { ...updates.set }, 
+                const targetEvent = await Event.findById(eventId)
 
-                    // appends guests to the array
-                    $push: { guests: { $each: updates.guests.add } }, 
+                if(targetEvent){
+                    returnValue.newEvent = await Event.findByIdAndUpdate(eventId, {
+                        // updates non-list variables
+                        $set: { ...updates.set }, 
 
-                    // removes guests from the array
-                    $pull: { guests: { _id: { $in: updates.guests.remove } } }
-                }, { new: true })
-                const error = null
+                        // appends guests to the array
+                        $push: { guests: { $each: updates.guests.add } }, 
+                    }, { new: true })
+                    
+                    // removes guests from the array (if there are any to remove)
+                    if(updates.guests.remove.length){
+                        returnValue.newEvent = await Event.findByIdAndUpdate(eventId, {
+                            $pull: {
+                                guests: { 
+                                    _id: { $in: updates.guests.remove } 
+                                } 
+                            } 
+                        }, { new: true })
+                    }
+                    
+                    returnValue.error = null
+                }
+                
+                else{
+                    returnValue.newEvent = null
+                    returnValue.error = {
+                        status: 404,
+                        json: { message: 'Unfortunately, this event was not found.' }
+                    }
+                }
             } 
 
             // if an error occurs, it means one of the event's fields if invalid
             catch(e){
-                const newEvent = null
-                const error = {
+                returnValue.newEvent = null
+                returnValue.error = {
                     status: 400, // bad request
                     json: { message: 'An error ocurred.', overlaps }
                 }
@@ -176,7 +232,7 @@ const eventService = {
             }
         }
 
-        return {newEvent, error}
+        return returnValue
     },
 
     rsvp: async (guestId, eventId, bool) => {
@@ -185,23 +241,21 @@ const eventService = {
         // searchs for a guest with this one's id
         guest = targetEvent.guests.find(g => g._id == guestId)
         
+        const returnValue = {}
+        
         // if the user is a guest at that event
         if(guest){
             guest.RSVP = bool
 
             try {
-                const response = {
-                    status: 200,
-                    json: await Event.findByIdAndUpdate(eventId, { $set: { guests: targetEvent.guests } }, { new: true })
-                }
+                returnValue.status = 200
+                returnValue.json = await Event.findByIdAndUpdate(eventId, { $set: { guests: targetEvent.guests } }, { new: true })
             } 
 
             // if an error occurs, it means the received bool is not a Boolean
             catch(e){
-                const response = {
-                    status: 400, // bad request
-                    json: { message: 'An error ocurred.' }
-                }
+                returnValue.status = 400 // bad request
+                returnValue.json = { message: 'An error ocurred.' }
 
                 // logs error
                 console.log(e)
@@ -209,13 +263,11 @@ const eventService = {
         }
         
         else{
-            const response = {
-                status: 409,
-                json: { message: 'Unfortunately, this guest was not invited to this event.' }
-            }
+            returnValue.status = 409
+            returnValue.json = { message: 'Unfortunately, this guest was not invited to this event.' }
         }
 
-        return response
+        return returnValue
     },
 
     find: async (userId) => await Event.find({creator: userId}),

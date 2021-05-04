@@ -27,7 +27,7 @@ const eventSchema = mongoose.Schema({
         type: Date,
         default: new Date,
         alias: 'start',
-        min: Date.now,
+        min: new Date,
         required: true
     },
     endDate: {
