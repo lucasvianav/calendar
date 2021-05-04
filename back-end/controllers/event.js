@@ -35,9 +35,9 @@ const eventController = {
 
     delete: async(req, res) => {
         const {userId, eventId} = req.params
-        await eventService.delete(userId, eventId)
+        const status = await eventService.delete(userId, eventId)
 
-        return res.status(200).json({})
+        return res.status(status).json({})
     }
 }
 

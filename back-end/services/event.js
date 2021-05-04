@@ -220,12 +220,14 @@ const eventService = {
 
     find: async (userId) => await Event.find({creator: userId}),
 
-    // delete: async(req, res) => {
-    //     const {userId, eventId} = req.params
-    //     await eventService.delete(userId, eventId)
+    delete: async(userId, eventId) => {
+        try {
+            await Event.findOneAndDelete({ _id: eventId, creator: userId })
+            return 200
+        } 
 
-    //     return res.status(200).json({})
-    // }
+        catch(e){ return 400 }
+    }
 }
 
 module.exports = eventService
