@@ -36,8 +36,11 @@ const eventService = {
             ]
         }, 'title startDate endDate')
         
+        // if guests are invited, fetch their id from their emails
+        // and creates a list of objects like the guestSchema with no RSVP
+        // guests = [ { _id: guest_id } ]
         if(guests.length){
-            guests = await Account.find({ email: { $in: guests } }, '_id')
+            guests = (await Account.find({ email: { $in: guests } }, '_id')).map(_id => ( { _id } ))
         }
 
         // if any overlap is found
