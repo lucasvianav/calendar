@@ -4,17 +4,17 @@ const eventController = {
     create: async (req, res) => {
         const {userId} = req.params
         const {title, description, startDate, endDate, guests} = req.body
-        const {event, error} = await eventService.create(title, description, startDate, endDate, userId, guests)
+        const {newEvent, error} = await eventService.create(title, description, startDate, endDate, userId, guests)
 
-        return event ? res.status(200).json(event) : res.status(error.status).json(error.json)
+        return newEvent ? res.status(200).json(newEvent) : res.status(error.status).json(error.json)
     },
 
     update: async(req, res) => {
         const {userId, eventId} = req.params
         const {edits} = req.body
-        const {event, error} = await eventService.update(userId, eventId, edits)
+        const {newEvent, error} = await eventService.update(userId, eventId, edits)
 
-        return event ? res.status(200).json(event) : res.status(error.code).json(error.json)
+        return newEvent ? res.status(200).json(newEvent) : res.status(error.code).json(error.json)
     },
     
     rsvp: async (req, res) => {
