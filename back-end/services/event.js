@@ -144,8 +144,8 @@ const eventService = {
             // users that were added as guests will be removed
             // and users that weren't will be added as guests
             if(edits.guests){
-                updates.guests.add = edits.guests.filter(g => !oldEvent.guests.includes(g)) 
-                updates.guests.remove = edits.guests.filter(g => oldEvent.guests.includes(g)) 
+                updates.guests.add = edits.guests.filter(_id => !oldEvent.guests.any(g => g._id == _id)).map(_id => ( { _id } )) 
+                updates.guests.remove = edits.guests.filter(_id => oldEvent.guests.any(g => g._id == _id))
             }
 
 
@@ -155,10 +155,10 @@ const eventService = {
                     $set: { ...updates.set }, 
 
                     // appends guests to the array
-                    $push: { guests: { $each: [ ...updates.guests.add ] } }, 
+                    $push: { guests: { $each: updates.guests.add } }, 
 
                     // removes guests from the array
-                    $pullAll: { guests: [ ...updates.guests.remove ] } 
+                    $pull: { guests: { _id: { $in: updates.guests.remove } } }
                 })
                 const error = null
             } 
