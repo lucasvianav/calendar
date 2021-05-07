@@ -23,6 +23,13 @@ const authService = {
         }
         
         return response
+    },
+
+    signin: async (googleId) => {
+        const user = Account.findOne({googleId})
+        
+        return user ? { status: 200, json: user } : { status: 404, json: { message: 'Login failed because account was not found.' } }
+        
     }
 }
 
