@@ -5,7 +5,7 @@ const app = express() // server app
 const routers = require('./routers') // request endpoints
 const mongoose = require('mongoose')
 const db = require('./config/mongodb') // database
-
+const passport = require('passport') // OAuth
 
 // Require Passport config
 // require('./config/passport')
@@ -25,6 +25,10 @@ app.use(cors({ origin: 'http://localhost:' + process.env.CLIENT_PORT, optionsSuc
 
 // setup routers
 app.use('/api', routers)
+
+// setup passport
+app.use(passport.initialize())
+// app.use(passport.session())
 
 // start server
 db.on('error', console.error.bind(console, 'connection error:'))
