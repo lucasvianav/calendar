@@ -9,10 +9,10 @@ const google = {
     options: {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: '/auth/google/redirect'
+        callbackURL: '/api/auth/google/redirect'
     },
 
-    callback: authService.login
+    callback: authService.signin
 }
 
 passport.use(new GoogleStrategy(google.options, google.callback))
