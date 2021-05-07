@@ -9,10 +9,12 @@ const accountSchema = mongoose.Schema({
     email: {
         type: String,
         trim: true,
+        unique: true,
         required: true
     },
     googleId: {
         type: String,
+        unique: true,
         required: true
     }
 })
