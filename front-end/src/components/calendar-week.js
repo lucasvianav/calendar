@@ -32,7 +32,7 @@ class CalendarWeek extends React.Component {
                 {/* sets up calendar dates */}
                 <CalendarDates sunday={this.state.sunday}/>
         
-                <CalendarEvent startDate={'2021-05-04 10:19'} endDate={'2021-05-04 10:24'}/>
+                {/* <CalendarEvent startDate={'2021-05-04 10:19'} endDate={'2021-05-04 10:24'}/> */}
             </Grid>
         </Flex>
     )
