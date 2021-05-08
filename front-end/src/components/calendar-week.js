@@ -20,7 +20,7 @@ class CalendarWeek extends React.Component {
 
     render = () => (
         <Flex justify='center' mr='9%' my='2%'>
-            <Grid templateRows={`repeat(${minutesInDay+1}, 1fr)`} templateColumns='repeat(8, 1fr)' p={[0, 2, 0, 2]} w='100%' h='1111px' gap={0}>
+            <Grid templateRows={`repeat(${minutesInDay+1}, 1fr)`} templateColumns='repeat(8, 1fr)' p={[0, 2, 0, 2]} w='100%' h='1650px' gap={0}>
                 {/* sets up calendar grid (borders) */}
                 <CalendarGrid/>
 
@@ -32,7 +32,7 @@ class CalendarWeek extends React.Component {
                 {/* sets up calendar dates */}
                 <CalendarDates sunday={this.state.sunday}/>
         
-                <CalendarEvent startDate={'2021-05-04 10:19'} endDate={'2021-05-04 11:36'}/>
+                <CalendarEvent startDate={'2021-05-04 10:19'} endDate={'2021-05-04 10:24'}/>
             </Grid>
         </Flex>
     )
