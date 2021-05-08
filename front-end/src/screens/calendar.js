@@ -7,10 +7,7 @@ class Calendar extends React.Component {
     render = () => (
         <body>
             <Header/> 
-
-            <main>
-                <CalendarWeek/>
-            </main>
+            <main> <CalendarWeek/> </main>
         </body>
     )
 }

@@ -8,12 +8,18 @@ import {
 } from 'react-router-dom'
 
 import Calendar from './screens/calendar'
+import Login from './screens/login'
 
 class App extends React.Component{
     render = () => ( 
         <BrowserRouter>
             <Switch>
-                <Route path='/' render={props => <Calendar/>} exact/>
+                <Route path='/' render={_ => <Calendar/>} exact/>
+
+                <Route path='/login' render={_ => <Login/>} exact/>
+                <Route path='/signup' render={_ => <Login/>} exact/>
+
+                <Route path='/:base*' render={_ => <Redirect to='/'/>} exact/>
             </Switch>
         </BrowserRouter>
     )
