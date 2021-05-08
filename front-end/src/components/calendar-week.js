@@ -1,46 +1,41 @@
-import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/layout'
+import { Box, Flex, Grid, GridItem, Text, Heading } from '@chakra-ui/layout'
 import React from 'react'
 
 const minutesInDay = 60*24
+const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
 
 class CalendarWeek extends React.Component {
     render = () => (
-        <Flex>
-            <Grid templateRows={`repeat(24, 1fr)`} templateColumns='repeat(1, 1fr)' p={[0, 2, 0, 2]} w='8%' h='1080px' gap={0} zIndex='2'>
-                <GridItem rowSpan={1} colSpan={1}/>
-                <GridItem rowSpan={1} colSpan={1}/>
+        <Flex justify='center'>
+            <Grid templateRows={`repeat(${minutesInDay+1}, 1fr)`} templateColumns='repeat(8, 1fr)' p={[0, 2, 0, 2]} w='95%' h='1111px' gap={0}>
                 {
-                    Array.from({length: 23}, (_, i) => 
-                        <GridItem rowSpan={1} colSpan={1}>
-                            <Text textAlign='right' fontSize='7pt' color='grey'>{i < 12 ? (i+1).toString() + ' AM' : (i-11).toString() + ' PM'}</Text>
+                    Array.from({length: 23}, (_, i) => (
+                        <GridItem rowSpan={60} colSpan={1} rowStart={i*60+3} colStart={1} w='15%' bg='pink.300' mr='0px'>
+                            <Text textAlign='right' fontSize='6pt' color='grey' w='100%' h='100%'>
+                                {i < 12 ? (i+1).toString() + ' AM' : (i-11).toString() + ' PM'}
+                            </Text>
                         </GridItem>
-                    )
+                    ))
                 }
-                <GridItem rowSpan={1} colSpan={1} border='2px' borderColor='orange.50'/>
-            </Grid>
 
-            <Grid templateRows={`repeat(${minutesInDay}, 1fr)`} templateColumns='repeat(7, 1fr)' p={[0, 2, 0, 2]} w='90%' h='1080px' gap={0} zIndex='2'>
-                <GridItem rowSpan={60} colSpan={1} mb='7px'></GridItem>
-                <GridItem rowSpan={60} colSpan={1} mb='7px'></GridItem>
-                <GridItem rowSpan={60} colSpan={1} mb='7px'></GridItem>
-                <GridItem rowSpan={60} colSpan={1} mb='7px'></GridItem>
-                <GridItem rowSpan={60} colSpan={1} mb='7px'></GridItem>
-                <GridItem rowSpan={60} colSpan={1} mb='7px'></GridItem>
-                <GridItem rowSpan={60} colSpan={1} mb='7px'></GridItem>
+                {
+                    weekdays.map((day, i) => (
+                        <GridItem rowSpan={1} colSpan={1} rowStart={1} colStart={i%7+2} m='0px' mb='7px' bg="">
+                            <Heading as='h6' size='xs' color='gray.600' textAlign='center'>{day}</Heading>
+                            <Heading as='h3' size='lg' color='gray.700' textAlign='center'>{i+1}</Heading>
+                        </GridItem>
+                    ))
+                }
 
-                {Array.from({length: 24*7}, () => <GridItem rowSpan={60} colSpan={1} bg='orange.400' p='0' borderRadius='7' marginX='4px' marginY='4px'><Flex justify='center' align='center' m='0'>oi</Flex></GridItem>)}
-            </Grid>
-
-            <Grid templateRows={`repeat(24, 1fr)`} templateColumns='repeat(7, 1fr)' p={[0, 2, 0, 2]} w='90%' h='1080px' gap={0} position='absolute' zIndex='1' left='8%'>
-                <GridItem rowSpan={1} colSpan={1} mb='7px' bg=""><Text textAlign='center'>Dom</Text></GridItem>
-                <GridItem rowSpan={1} colSpan={1} mb='7px' bg=""><Text textAlign='center'>Seg</Text></GridItem>
-                <GridItem rowSpan={1} colSpan={1} mb='7px' bg=""><Text textAlign='center'>Ter</Text></GridItem>
-                <GridItem rowSpan={1} colSpan={1} mb='7px' bg=""><Text textAlign='center'>Qua</Text></GridItem>
-                <GridItem rowSpan={1} colSpan={1} mb='7px' bg=""><Text textAlign='center'>Qui</Text></GridItem>
-                <GridItem rowSpan={1} colSpan={1} mb='7px' bg=""><Text textAlign='center'>Sex</Text></GridItem>
-                <GridItem rowSpan={1} colSpan={1} mb='7px' bg=""><Text textAlign='center'>Sáb</Text></GridItem>
-
-                {Array.from({length: 24*7}, () => <GridItem rowSpan={1} colSpan={1} borderX='1px' borderY='1px' borderColor='orange.100' bg="white"/>)}
+                {
+                    Array.from({length: 24*7}, (_, i) => (
+                        <GridItem rowSpan={60} colSpan={1} rowStart={parseInt(i/7)*60+2} colStart={i%7+2} m='0px' borderX='1px' borderY='1px' borderColor='gray.300' padding='5%' textAlign='center'>
+                            <Text backgroundColor="orange.500" w='100%' h='100%'>
+                                oi
+                            </Text>
+                        </GridItem>
+                    ))
+                }
             </Grid>
         </Flex>
     )
