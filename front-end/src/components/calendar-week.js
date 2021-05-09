@@ -35,8 +35,7 @@ class CalendarWeek extends React.Component {
                 {/* sets up calendar dates */}
                 <CalendarDates sunday={this.state.sunday}/>
         
-                {/* <CalendarEvent startDate={'2021-05-04 10:19'} endDate={'2021-05-04 10:24'}/> */}
-                {this.context.events.map(e => <CalendarEvent eventObj={e}/>)}
+                {this.context.events.map(e => <CalendarEvent key={e._id} eventObj={e}/>)}
             </Grid>
         </Flex>
     )
