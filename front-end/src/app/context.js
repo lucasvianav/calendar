@@ -21,6 +21,7 @@ export class DataProvider extends React.Component {
         this.fetchEvents = this.fetchEvents.bind(this)
         this.fetchUser = this.fetchUser.bind(this)
         this.hasUserData = this.hasUserData.bind(this)
+        this.fetchAllData = this.fetchAllData.bind(this)
     }
     
     async signin(email, password){
@@ -39,7 +40,6 @@ export class DataProvider extends React.Component {
 
         if(r.status === 200){
             const { name, email, _id } = r
-            console.log(_id)
             this.setState({ name, email, _id })
         }
 
@@ -77,9 +77,12 @@ export class DataProvider extends React.Component {
             this.signout()
         }
         
-        console.log(r)
-        
         return r
+    }
+    
+    async fetchAllData(){
+        const r_user = await this.fetchUser()
+        return r_user.status === 200 ? await this.fetchEvents() : r_user
     }
     
     hasUserData(){
@@ -101,10 +104,10 @@ export class DataProvider extends React.Component {
 
     render = () => {
         const { name, email, events } = this.state
-        const { signin, signup, signout, validatePw, fetchEvents, fetchUser, hasUserData } = this
+        const { signin, signup, signout, validatePw, fetchEvents, fetchUser, hasUserData, fetchAllData } = this
 
         return(
-            <DataContext.Provider value={{ name, email, events, signin, signup, signout, validatePw, fetchEvents, fetchUser, hasUserData }}>
+            <DataContext.Provider value={{ name, email, events, signin, signup, signout, validatePw, fetchEvents, fetchUser, hasUserData, fetchAllData }}>
                 {this.props.children}
             </DataContext.Provider>
         )
