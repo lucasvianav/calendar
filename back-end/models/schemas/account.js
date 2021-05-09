@@ -12,9 +12,8 @@ const accountSchema = mongoose.Schema({
         unique: true,
         required: true
     },
-    googleId: {
+    password: {
         type: String,
-        unique: true,
         required: true
     }
 })

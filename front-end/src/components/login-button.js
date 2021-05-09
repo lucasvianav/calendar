@@ -3,9 +3,8 @@ import { Heading } from '@chakra-ui/layout'
 import { ImGoogle } from 'react-icons/im'
 import React from 'react'
 import api from '../connection'
-import axios from 'axios'
 
-class LoginGoogleButton extends React.Component {
+class LoginButton extends React.Component {
     async onClick(){
         console.log('aqui')
         console.log((await api.get('/auth/google')).data)
@@ -19,4 +18,4 @@ class LoginGoogleButton extends React.Component {
     )
 }
 
-export default LoginGoogleButton
+export default LoginButton

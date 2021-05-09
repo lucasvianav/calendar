@@ -1,22 +1,16 @@
 const authService = require('../services/auth')
-const passport = require('passport')
 
 const authController = {
-    oauth: async (req, res) => {
-        console.log('oi')
-        return await passport.authenticate('google', {scope: ['email', 'profile']})
-    },
-
     signup: async (req, res) => {
-        const {name, email, googleId} = req.body
-        const r = await authService.signup(name, email, googleId)
+        const {name, email, password} = req.body
+        const r = await authService.signup(name, email, password)
 
         return res.status(r.status).json(r.json)
     },
 
     signin: async (req, res) => {
-        const {googleId} = req.body
-        const r = await authService.signin(googleId)
+        const {password} = req.body
+        const r = await authService.signin(password)
 
         return res.status(r.status).json(r.json)
     }

@@ -4,15 +4,13 @@ const express = require('express')
 const app = express() // server app
 const routers = require('./routers') // request endpoints
 const mongoose = require('mongoose')
-const db = require('./config/mongodb') // database
-const passport = require('passport') // OAuth
-const cookieSession = require('cookie-session')
+const db = require('./mongodb') // database
 
-// Require Passport config
-require('./config/passport')
-
-// get .env file's data
-require('dotenv').config();
+// fix mongoose deprecation warnings
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
 
 // avoid deprecated congif
 mongoose.set('useFindAndModify', false)
@@ -26,16 +24,6 @@ app.use(cors({ origin: 'http://localhost:' + process.env.CLIENT_PORT, optionsSuc
 
 // setup routers
 app.use('/api', routers)
-
-// setup cookies
-app.use(cookieSession({
-    maxAge: 24*60*60*1000,
-    keys: process.env.COOKIE_KEY
-}))
-
-// setup passport
-app.use(passport.initialize())
-app.use(passport.session())
 
 // start server
 db.on('error', console.error.bind(console, 'connection error:'))

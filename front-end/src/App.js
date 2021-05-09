@@ -6,7 +6,6 @@ import {
     Switch,
     Redirect
 } from 'react-router-dom'
-import api from './connection'
 
 import Calendar from './screens/calendar'
 import Login from './screens/login'
@@ -19,13 +18,6 @@ class App extends React.Component{
 
                 <Route path='/login' render={_ => <Login/>} exact/>
                 <Route path='/signup' render={_ => <Redirect to='/login'/>} exact/>
-
-                <Route path='/auth/google/callback' render={async p => {
-                    console.log(p.location.search)
-                    api.get('/auth/google/redirect' + p.location.search).then(
-                        p.history.push('/')
-                    )
-                }} exact/>
 
                 <Route path='/:base*' render={_ => <Redirect to='/'/>} exact/>
             </Switch>
