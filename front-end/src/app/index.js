@@ -7,8 +7,8 @@ import {
     Redirect
 } from 'react-router-dom'
 
-import Calendar from './screens/calendar'
-import Login from './screens/login'
+import Calendar from '../screens/calendar'
+import Login from '../screens/login'
 
 class App extends React.Component{
     render = () => ( 
