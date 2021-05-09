@@ -24,7 +24,7 @@ class Header extends React.Component {
             // color={["white", "white", "primary.700", "primary.700"]}
             {...this.props}
         >
-            <Logo width='30%'/>
+            <Logo type='png' width='30%'/>
             <MenuPanel toggle={this.toggleMenu} isOpen={this.state.isOpen}/>
         </Flex>
     )
