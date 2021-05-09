@@ -7,14 +7,14 @@ class CalendarEvent extends React.Component {
     constructor(props){
         super(props)
 
-        // const { eventObj } = this.props
-        let { startDate, endDate } = this.props
+        const { eventObj } = this.props
+        // let { startDate, endDate } = this.props
 
         // parses date
-        // const startDate = new Date(eventObj.startDate)
-        // const endDate = new Date(eventObj.endDate)
-        startDate = new Date(startDate)
-        endDate = new Date(endDate)
+        const startDate = new Date(eventObj.startDate)
+        const endDate = new Date(eventObj.endDate)
+        // startDate = new Date(startDate)
+        // endDate = new Date(endDate)
 
         // duration in minutes (floored)
         const duration = parseInt((endDate-startDate)/(1000*60))
@@ -25,8 +25,8 @@ class CalendarEvent extends React.Component {
         // number of days the event lasts
         const noDays = parseInt(duration/(24*60))
 
-        // this.state = { event: eventObj, rowStart, colStart, duration, noDays }
-        this.state = { rowStart, endDate, colStart, duration, noDays }
+        this.state = { event: eventObj, rowStart, colStart, duration, noDays }
+        // this.state = { rowStart, endDate, colStart, duration, noDays }
     }
 
     render = () => (
@@ -43,8 +43,8 @@ class CalendarEvent extends React.Component {
                             duration={
                                 i < this.state.noDays-1 
                                     ? minutesInDay 
-                                    // : this.state.event.endDate.getMinutes() + this.state.endDate.getHours()*60
-                                    : this.state.endDate.getMinutes() + this.state.endDate.getHours()*60
+                                    : this.state.event.endDate.getMinutes() + this.state.endDate.getHours()*60
+                                    // : this.state.endDate.getMinutes() + this.state.endDate.getHours()*60
                             }
                         /> 
                     )

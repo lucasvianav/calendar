@@ -1,5 +1,6 @@
 import { Flex, Grid } from '@chakra-ui/layout'
 import React from 'react'
+import { DataContext } from '../app/context'
 import CalendarDates from './calendar-dates'
 import CalendarEvent from './calendar-event'
 import CalendarGrid from './calendar-grid'
@@ -9,6 +10,8 @@ import CalendarTodayHighlight from './calendar-today-highlight'
 const minutesInDay = 60*24
 
 class CalendarWeek extends React.Component {
+    static contextType = DataContext
+
     constructor(props){
         super(props)
 
@@ -33,6 +36,7 @@ class CalendarWeek extends React.Component {
                 <CalendarDates sunday={this.state.sunday}/>
         
                 {/* <CalendarEvent startDate={'2021-05-04 10:19'} endDate={'2021-05-04 10:24'}/> */}
+                {this.context.events.map(e => <CalendarEvent eventObj={e}/>)}
             </Grid>
         </Flex>
     )
