@@ -19,7 +19,7 @@ class CalendarWeek extends React.Component {
     }
 
     render = () => (
-        <Flex justify='center' mr='9%' my='2%'>
+        <Flex as='main' justify='center' mr='9%' my='2%'>
             <Grid templateRows={`repeat(${minutesInDay+1}, 1fr)`} templateColumns='repeat(8, 1fr)' p={[0, 2, 0, 2]} w='100%' h='1650px' gap={0}>
                 {/* sets up calendar grid (borders) */}
                 <CalendarGrid/>

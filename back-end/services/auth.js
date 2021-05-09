@@ -1,18 +1,49 @@
 const Account = require('../models/account')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+
+const getJWT = (_id) => jwt.sign({ _id }, process.env.JWT_PRIVATE_KEY, { expiresIn: '12h' })
 
 const authService = {
-    signup: async (name, email, googleId) => {
+    authenticate: async (token) => {
+        try {
+            const _id = jwt.verify(token, process.env.JWT_PRIVATE_KEY)
+            return { status: 200, _id }
+        } 
+
+        catch (e) {
+            return { status: 401, message: 'You must be logged in to see this content.' }
+        }
+    },
+    
+    find: async(token) => {
+        try {
+            const { _id } = jwt.verify(token, process.env.JWT_PRIVATE_KEY)
+            const user = await Account.findById(_id)
+            
+            if(!user){ throw new Error('User not found.') }
+            
+            return { name: user.name, email: user.email,_id: user._id, status: 200 }
+        } 
+
+        catch (e) {
+            return { status: 401, message: 'An error occurred.' }
+        }
+    },
+
+    signup: async (name, email, password) => {
         // if any information is missing
-        if(!name || !email || !googleId){
-            return { status: 400, json: { message: 'Unfortunately, your signup failed because of lack of information.' } }
+        if(!name || !email || !password){
+            return { message: 'Unfortunately, your signup failed because of lack of information.', status: 400 }
         }
 
-        const response = {}
+        // hashes the password
+        password = await bcrypt.hash(password, 10)  
 
-        // tries and creates the accoutn
+        // tries and creates the account
         try{
-            response.json = await Account.create({name, email, googleId})
-            response.status = 200
+            const user = await Account.create({name, email, password})
+            return { name: user.name, email: user.email, _id: user._id, jwt: getJWT(user._id), status: 200 }
         }
 
         // if an error is caught, it means that account already exists
@@ -20,17 +51,25 @@ const authService = {
             // logs error
             console.log(e)
 
-            response.json = { message: 'The signup failed because this account already exists.' }
-            response.status = 403
+            return { message: 'The signup failed because this account already exists.', status: 403 }
         }
-        
-        return response
     },
 
-    signin: async (googleId) => {
-        const user = await Account.findOne({googleId})
+    signin: async (email, password) => {
+        const user = await Account.findOne({email})
         
-        return user ? { status: 200, json: user } : { status: 404, json: { message: 'Login failed because account was not found.' } }
+        if(!user){
+            return { message: 'This account doesn\'t exist.', status: 404 }
+        }
+        
+        // checks if the password is equivalent to the stored hash
+        else if(!await bcrypt.compare(password, user.password)){
+            return { message: 'The password is incorrect.', status: 401 }
+        }
+        
+        else{
+            return { name: user.name, email: user.email,_id: user._id, jwt: getJWT(user._id), status: 200 }
+        }
         
     }
 }

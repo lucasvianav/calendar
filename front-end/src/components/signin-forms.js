@@ -1,32 +1,20 @@
 import React from 'react'
 import $ from 'jquery'
-import { Flex, Heading, HStack, VStack } from '@chakra-ui/layout'
+import { Heading, VStack } from '@chakra-ui/layout'
 import {
     FormControl,
     FormLabel,
     FormErrorMessage,
     FormHelperText,
     Input,
-    Form,
     Button,
     ButtonGroup
 } from "@chakra-ui/react"
+import { DataContext } from '../app/context'
 
+class SigninForms extends React.Component {
+    static contextType = DataContext
 
-const isValidPassword = (pw) => {
-    /** Password Regex Explanation
-        * (?=\S*?[0-9]) - a digit must occur at least once
-        * (?=\S*?[a-z]) - a lower case letter must occur at least once
-        * (?=\S*?[A-Z]) - an upper case letter must occur at least once
-        * \S{8,} - at least 8 characters
-        * \S - no whitespace allowed
-        */
-        let pwRegex = RegExp("(?=\\S*?[0-9])(?=\\S*?[a-z])(?=\\S*?[A-Z])\\S{8,}")
-
-    return !(pw.includes(' ') || !pwRegex.test(pw))
-}
-
-class LoginForms extends React.Component {
     constructor(props){
         super(props)
 
@@ -48,8 +36,21 @@ class LoginForms extends React.Component {
     async handleSubmit(e){
         e.preventDefault()
 
-        if(isValidPassword(this.state.pw)){
+        if(this.context.validatePw(this.state.pw)){
+            const { email, pw } = this.state
+            const r = await this.context.signin(email, pw)
             
+            if(r.status === 200){
+                this.setState({ email: '', isEmailInvalid: false, pw: '', isPwInvalid: false })
+
+                localStorage.setItem('jwt', JSON.stringify(r.jwt))
+                this.props.history.push('/')
+            }
+            
+            else{
+                alert(r.message)
+                this.setState({ isEmailInvalid: false, pw: '', isPwInvalid: false })
+            }
         }
         
         else{
@@ -58,13 +59,9 @@ class LoginForms extends React.Component {
         }
     }
     
-    redirectSignup(){
-        
-    }
-        
     render = () => (
         <VStack as='form' onSubmit={this.handleSubmit} spacing={10}>
-            <Heading>Login</Heading>
+            <Heading>LOG IN TO YOUR ACCOUNT</Heading>
 
             <FormControl id='email' isInvalid={this.state.isEmailInvalid} isRequired>
                 <FormLabel as='label'>Email address:</FormLabel>
@@ -86,11 +83,11 @@ class LoginForms extends React.Component {
             </FormControl>
 
             <ButtonGroup size='lg' spacing={6} justifyContent='center'>
-                <Button variant='solid' type='submit' colorScheme='blue'>Signin</Button>
-                <Button variant='outline' type='button' onClick={this.redirectSignup} colorScheme='blue'>Signup</Button>
+                <Button variant='solid' type='submit' colorScheme='blue'>SIGN-IN</Button>
+                <Button variant='outline' type='button' onClick={this.props.toggle} colorScheme='blue'>SIGN-UP</Button>
             </ButtonGroup>
         </VStack>
     )
 }
 
-export default LoginForms
+export default SigninForms

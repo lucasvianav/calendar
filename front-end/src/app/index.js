@@ -8,20 +8,21 @@ import {
 } from 'react-router-dom'
 
 import Calendar from '../screens/calendar'
-import Login from '../screens/login'
+import Auth from '../screens/auth'
+import { DataProvider } from './context'
 
 class App extends React.Component{
     render = () => ( 
-        <BrowserRouter>
+        <DataProvider><BrowserRouter>
             <Switch>
-                <Route path='/' render={_ => <Calendar/>} exact/>
+                <Route path='/' render={props => <Calendar {...props}/>} exact/>
 
-                <Route path='/login' render={_ => <Login/>} exact/>
-                <Route path='/signup' render={_ => <Redirect to='/login'/>} exact/>
+                <Route path='/login' render={props => <Auth {...props} type='signin'/>} exact/>
+                <Route path='/signup' render={props => <Auth {...props} type='signup'/>} exact/>
 
-                <Route path='/:base*' render={_ => <Redirect to='/'/>} exact/>
+                <Route path='/:base*' render={props => <Redirect {...props} to='/'/>} exact/>
             </Switch>
-        </BrowserRouter>
+        </BrowserRouter></DataProvider>
     )
 }
 

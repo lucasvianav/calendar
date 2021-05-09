@@ -9,8 +9,6 @@ class Header extends React.Component {
         this.state = { isOpen: false }
     }
     
-    toggleMenu = () => this.setState(prevState => ({isOpen: !prevState.isOpen}))
-
     render = () => (
         <Flex
             as="nav"
@@ -25,7 +23,7 @@ class Header extends React.Component {
             {...this.props}
         >
             <Logo type='png' width='30%'/>
-            <MenuPanel toggle={this.toggleMenu} isOpen={this.state.isOpen}/>
+            <MenuPanel {...this.props}/>
         </Flex>
     )
 }

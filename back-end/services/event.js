@@ -10,7 +10,8 @@ const eventService = {
                 newEvent: null,
                 error: {
                     status: 400,
-                    json: { message: 'The event could not be created because it\'s dates are invalid. A new event cannot start in the past nor last less than 5 minutes.', overlaps: [] }
+                    message: 'The event could not be created because it\'s dates are invalid. A new event cannot start in the past nor last less than 5 minutes.', 
+                    overlaps: [] 
                 }
             }
         }
@@ -54,7 +55,8 @@ const eventService = {
                 newEvent: null,
                 error: {
                     status: 409, // conflict
-                    json: { message: 'The event could not be created because it overlaps with existing events.', overlaps }
+                    message: 'The event could not be created because it overlaps with existing events.',
+                    overlaps 
                 }
             }
         }
@@ -78,7 +80,8 @@ const eventService = {
             returnValue.newEvent = null
             returnValue.error = {
                 status: 400, // bad request
-                json: { message: 'An error ocurred.', overlaps }
+                message: 'An error ocurred.', 
+                overlaps             
             }
 
             // logs error
@@ -107,7 +110,8 @@ const eventService = {
                 newEvent: null,
                 error: {
                     status: 400,
-                    json: { message: 'The event could not be created because it\'s dates are invalid. A new event cannot start in the past nor last less than 5 minutes.', overlaps: [] }
+                    message: 'The event could not be created because it\'s dates are invalid. A new event cannot start in the past nor last less than 5 minutes.', 
+                    overlaps: [] 
                 }
             }
         }
@@ -153,7 +157,8 @@ const eventService = {
             returnValue.newEvent = null
             returnValue.error = {
                 status: 409, // conflict
-                json: { message: 'The event could not be edited because it would overlap with other events.', overlaps }
+                message: 'The event could not be edited because it would overlap with other events.', 
+                overlaps 
             }
         }
 
@@ -214,7 +219,7 @@ const eventService = {
                     returnValue.newEvent = null
                     returnValue.error = {
                         status: 404,
-                        json: { message: 'Unfortunately, this event was not found.' }
+                        message: 'Unfortunately, this event was not found.' 
                     }
                 }
             } 
@@ -224,7 +229,8 @@ const eventService = {
                 returnValue.newEvent = null
                 returnValue.error = {
                     status: 400, // bad request
-                    json: { message: 'An error ocurred.', overlaps }
+                    message: 'An error ocurred.', 
+                    overlaps 
                 }
 
                 // logs error
@@ -249,13 +255,13 @@ const eventService = {
 
             try {
                 returnValue.status = 200
-                returnValue.json = await Event.findByIdAndUpdate(eventId, { $set: { guests: targetEvent.guests } }, { new: true })
+                returnValue.event = await Event.findByIdAndUpdate(eventId, { $set: { guests: targetEvent.guests } }, { new: true })
             } 
 
             // if an error occurs, it means the received bool is not a Boolean
             catch(e){
                 returnValue.status = 400 // bad request
-                returnValue.json = { message: 'An error ocurred.' }
+                returnValue.message = 'An error ocurred.' 
 
                 // logs error
                 console.log(e)
