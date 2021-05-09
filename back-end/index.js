@@ -6,9 +6,10 @@ const routers = require('./routers') // request endpoints
 const mongoose = require('mongoose')
 const db = require('./config/mongodb') // database
 const passport = require('passport') // OAuth
+const cookieSession = require('cookie-session')
 
 // Require Passport config
-// require('./config/passport')
+require('./config/passport')
 
 // get .env file's data
 require('dotenv').config();
@@ -26,9 +27,15 @@ app.use(cors({ origin: 'http://localhost:' + process.env.CLIENT_PORT, optionsSuc
 // setup routers
 app.use('/api', routers)
 
+// setup cookies
+app.use(cookieSession({
+    maxAge: 24*60*60*1000,
+    keys: process.env.COOKIE_KEY
+}))
+
 // setup passport
 app.use(passport.initialize())
-// app.use(passport.session())
+app.use(passport.session())
 
 // start server
 db.on('error', console.error.bind(console, 'connection error:'))

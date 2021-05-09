@@ -2,9 +2,14 @@ import { Button } from '@chakra-ui/button'
 import { Heading } from '@chakra-ui/layout'
 import { ImGoogle } from 'react-icons/im'
 import React from 'react'
+import api from '../connection'
+import axios from 'axios'
 
 class LoginGoogleButton extends React.Component {
-    onClick = () => {
+    async onClick(){
+        console.log('aqui')
+        console.log((await api.get('/auth/google')).data)
+        console.log('ali')
     }
 
     render = () => (
