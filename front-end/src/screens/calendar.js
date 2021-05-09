@@ -15,39 +15,33 @@ class Calendar extends React.Component {
         if(!JSON.parse(localStorage.getItem('jwt'))){ this.props.history.push('/login') }
     }
     
-    async componentDidMount(){
-        const r = await this.context.fetchEvents()
-
-        if(r.status === 401){ 
-            alert(r.message)
-            this.props.history.push('/login') 
-        }
-    }
-
     render = () => { 
+        const { staticContext, ...rest } = this.props
+
         const tags = (
              <>
-             <Header {...this.props}/> 
-             <CalendarWeek/>
+                 <Header {...rest}/> 
+                 <CalendarWeek/>
              </>
         )
 
-        return(
-            <body>
+        return this.context.hasUserData()
+        ?  
+            <Async promiseFn={this.context.fetchEvents}>
             {
-                this.context.hasUserData()
-                ?  tags
-                :
-                    <Async promiseFn={this.context.fetchUser}>
-                    {
-                        ({ response, error, isPending }) => isPending
-                        ? <Center w='100vw' h='100vh'><Spinner size='xl' label='Loading...'/></Center>
-                        : tags
-                    }
-                </Async>
+                ({ response, error, isPending }) => isPending
+                ? <Center w='100vw' h='100vh'><Spinner size='xl' label='Loading...'/></Center>
+                : tags
             }
-            </body>
-        )
+            </Async>
+        :
+            <Async promiseFn={this.context.fetchAllData}>
+            {
+                ({ response, error, isPending }) => isPending
+                ? <Center w='100vw' h='100vh'><Spinner size='xl' label='Loading...'/></Center>
+                : tags
+            }
+            </Async>
     }
 
         

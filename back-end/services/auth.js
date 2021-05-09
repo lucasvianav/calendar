@@ -7,7 +7,7 @@ const getJWT = (_id) => jwt.sign({ _id }, process.env.JWT_PRIVATE_KEY, { expires
 const authService = {
     authenticate: async (token) => {
         try {
-            const _id = jwt.verify(token, process.env.JWT_PRIVATE_KEY)
+            const { _id } = jwt.verify(token, process.env.JWT_PRIVATE_KEY)
             return { status: 200, _id }
         } 
 

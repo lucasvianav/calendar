@@ -3,7 +3,7 @@ const authService = require('../services/auth')
 const authController = {
     authenticate: async (req, res, next) => {
         const jwt = req.headers.authorization.replace(/^Bearer\s/, '')
-        const r = authService.authenticate(jwt)
+        const r = await authService.authenticate(jwt)
 
         if(r.status === 200){ next() }
         

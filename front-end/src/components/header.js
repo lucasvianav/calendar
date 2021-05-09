@@ -4,11 +4,6 @@ import Logo from './logo'
 import MenuPanel from './menu-panel'
 
 class Header extends React.Component {
-    constructor(props){
-        super(props)
-        this.state = { isOpen: false }
-    }
-    
     render = () => (
         <Flex
             as="nav"

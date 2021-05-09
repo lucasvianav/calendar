@@ -20,7 +20,7 @@ class Auth extends React.Component {
     toggleForms = () => this.setState(prevState => ({signin: !prevState.signin}))
 
     render = () => (
-        <Center as='body' h='100vh'>
+        <Center h='100vh'>
             <Flex w='fit-content' maxW='70%' shadow='2xl' bg='orange.50' justify='center' align='center' direction='column' y='5%' p={['1%', '5%', '3%', '5%']} textAlign='center'>
                 <Logo type='gif' m='0' mb='12%'/>
                 { this.state.signin ? <SigninForms {...this.props} toggle={this.toggleForms}/> : <SignupForms {...this.props} toggle={this.toggleForms}/> }
