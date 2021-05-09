@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Center, Heading } from '@chakra-ui/layout'
+import { Flex, Center } from '@chakra-ui/layout'
 import SigninForms from '../components/signin-forms'
 import Logo from '../components/logo'
 import SignupForms from '../components/signup-forms'

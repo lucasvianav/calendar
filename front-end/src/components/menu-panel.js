@@ -1,6 +1,5 @@
-import { Box, Heading, Stack, Text, VStack } from '@chakra-ui/layout'
+import { Box, Heading, Stack, VStack } from '@chakra-ui/layout'
 import React from 'react'
-import MenuItem from './menu-item'
 import { FiLogOut } from 'react-icons/fi'
 import { DataContext } from '../app/context'
 import { Button } from '@chakra-ui/button'
