@@ -8,7 +8,7 @@ class CalendarDates extends React.Component {
         <>
             {
                 weekdays.map((day, i) => (
-                    <GridItem key={day + i} rowSpan={1} colSpan={1} rowStart={1} colStart={i%7+2} m='0px' mb='7px' bg="" py='10%' zIndex={1}>
+                    <GridItem key={day + i} rowSpan={1} colSpan={1} rowStart={1} colStart={i%7+2} py='10%' zIndex={1}>
                         <Heading key={day + i + 1} as='h6' size='xs' color='gray.500' textAlign='center'>{day}</Heading>
                         <Heading key={day + i + 2} as='h3' size='lg' color='gray.600' textAlign='center'>{this.props.sunday.getDate()+i}</Heading>
                     </GridItem>

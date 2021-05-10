@@ -1,8 +1,8 @@
 import React from 'react'
 import { Flex, Center } from '@chakra-ui/layout'
-import SigninForms from '../components/signin-forms'
-import Logo from '../components/logo'
-import SignupForms from '../components/signup-forms'
+import SigninForms from './components/signin-forms'
+import Logo from '../../components/logo'
+import SignupForms from './components/signup-forms'
 
 class Auth extends React.Component {
     constructor(props){

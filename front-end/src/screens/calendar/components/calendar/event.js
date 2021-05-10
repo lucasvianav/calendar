@@ -1,5 +1,5 @@
 import React from 'react'
-import CalendarItem from './calendar-item'
+import CalendarItem from './item'
 
 const minutesInDay = 60*24
 const milisecsInDay = minutesInDay*60*1000

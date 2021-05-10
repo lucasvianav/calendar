@@ -1,8 +1,7 @@
 import { Button } from '@chakra-ui/button'
-import { BsPlusCircleFill } from 'react-icons/bs'
 import React from 'react'
-import NewEventModal from './calendar-new-event-modal'
-import $ from 'jquery'
+import { BsPlusCircleFill } from 'react-icons/bs'
+import NewEventModal from './new-event-modal'
 
 class NewEventButton extends React.Component {
     constructor(props){
@@ -14,10 +13,7 @@ class NewEventButton extends React.Component {
     }
     
     toggleModal(){
-        this.setState(
-            prevState => ({ isModalOpen: !prevState.isModalOpen }), 
-            () => $('#chakra-modal-new-event-modal').css('opacity', this.state.isModalOpen ? '1' : '0')
-        )
+        this.setState(prevState => ({ isModalOpen: !prevState.isModalOpen }))
     }
 
     render = () => (

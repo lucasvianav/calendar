@@ -1,14 +1,14 @@
 import { Flex, Grid } from '@chakra-ui/layout'
 import React from 'react'
-import { DataContext } from '../app/context'
-import CalendarDates from './calendar-dates'
-import CalendarEvent from './calendar-event'
-import CalendarGrid from './calendar-grid'
-import CalendarTimes from './calendar-times'
-import CalendarTodayHighlight from './calendar-today-highlight'
-import WeekControls from './calendar-week-controls'
+import { DataContext } from '../../../../app/context'
+import CalendarDates from './dates'
+import CalendarEvent from './event'
+import CalendarGrid from './grid'
+import CalendarTimes from './times'
+import CalendarTodayHighlight from './today-highlight'
+import WeekControls from './week-controls'
 import { Button } from '@chakra-ui/button'
-import NewEventButton from './calendar-new-event-button'
+import NewEventButton from './new-event-button'
 
 const minutesInDay = 60*24
 
@@ -69,7 +69,7 @@ class CalendarWeek extends React.Component {
         
             <NewEventButton style={{position:'fixed', right:'3%', bottom:'5%', colorScheme:'blue'}}/>
 
-            <Grid templateRows={`repeat(${minutesInDay+1}, 1fr)`} templateColumns='repeat(8, 1fr)' p={[0, 2, 0, 2]} mt='3%' w='100%' h='1650px' gap={0}>
+            <Grid templateRows={`repeat(${minutesInDay+1}, 1fr)`} templateColumns='repeat(8, 1fr)' p={[0, 2, 0, 2]} mt='3%' w='100%' h='1250px' gap={0}>
                 {/* sets up calendar grid (borders) */}
                 <CalendarGrid/>
 

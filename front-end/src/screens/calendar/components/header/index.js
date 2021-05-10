@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/layout'
 import React from 'react'
-import Logo from './logo'
+import Logo from '../../../../components/logo'
 import MenuPanel from './menu-panel'
 
 class Header extends React.Component {

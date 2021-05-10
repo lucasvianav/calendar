@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { Async } from 'react-async'
-import Header from '../components/header'
-import CalendarWeek from '../components/calendar-week'
-import { DataContext } from '../app/context'
+import Header from './components/header'
+import CalendarWeek from './components/calendar'
+import { DataContext } from '../../app/context'
 import { Spinner } from '@chakra-ui/spinner'
 import { Center } from '@chakra-ui/layout'
 
