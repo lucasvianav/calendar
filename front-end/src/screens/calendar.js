@@ -15,6 +15,15 @@ class Calendar extends React.Component {
         if(!JSON.parse(localStorage.getItem('jwt'))){ this.props.history.push('/login') }
     }
     
+    async componentDidMount(){
+        const r = await this.context.fetchAllData()
+
+        if(r.status === 401){ 
+            alert(r.message)
+            this.props.history.push('/login') 
+        }
+    }
+
     render = () => { 
         const { staticContext, ...rest } = this.props
 

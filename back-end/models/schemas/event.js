@@ -27,13 +27,11 @@ const eventSchema = mongoose.Schema({
         type: Date,
         default: new Date,
         alias: 'start',
-        min: new Date,
         required: true
     },
     endDate: {
         type: Date,
         alias: 'end',
-        min: new Date,
         required: true
     },
     creator: {

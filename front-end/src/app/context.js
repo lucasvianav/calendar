@@ -30,6 +30,7 @@ export class DataProvider extends React.Component {
         if(r.status === 200){
             const { name, email, _id } = r
             this.setState({ name, email, _id })
+            localStorage.setItem('jwt', JSON.stringify(r.jwt))
         }
         
         return r
@@ -70,6 +71,8 @@ export class DataProvider extends React.Component {
     }
 
     async fetchUser(){
+        JSON.parse(localStorage.getItem('jwt'))
+
         const r = (await api.get('/auth/')).data
         
         if(r.status === 200){
