@@ -121,6 +121,9 @@ const eventService = {
         const overlaps = !(edits.startDate || edits.endDate) ? [] : await Event.find({
             // makes sure the creator is the same
             creator: userId, 
+            
+            // the event doesn't overlap with itsel
+            _id: { $ne: eventId },
 
             // overlapping possibilities considering the event's new dates
             $or: [ 
