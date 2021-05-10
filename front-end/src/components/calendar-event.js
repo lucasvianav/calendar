@@ -36,7 +36,7 @@ class CalendarEvent extends React.Component {
 
         return(
             <>
-                <CalendarItem key={this.props.keys + Math.random()} {...this.state} event={e}/>
+                <CalendarItem k={(this.props.keys) + String(Math.random())} {...this.state} event={e}/>
 
                 {/* in case the event lasts multiple days */}
                 {
@@ -54,7 +54,8 @@ class CalendarEvent extends React.Component {
 
                             return ( 
                                 <CalendarItem  
-                                    key={String(this.props.keys + i + 1) + '-' + String(i)}
+                                    k={String(this.props.keys + String(i)) + '-' + String(i)}
+                                    key={String(this.props.keys + String(i)) + '-' + String(i)}
                                     rowStart={2} colStart={this.state.colStart+1+i} 
                                     duration={
                                         i < this.state.noDays-1 

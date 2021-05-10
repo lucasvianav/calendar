@@ -24,10 +24,11 @@ class CalendarWeek extends React.Component {
         const saturday = new Date(sunday)
         saturday.setDate(saturday.getDate() + 6)
 
-        this.state = { sunday, saturday }
+        this.state = { sunday, saturday, todaySunday: new Date(sunday), todaySaturday: new Date(saturday) }
         
         this.nextWeek = this.nextWeek.bind(this)
         this.pastWeek = this.pastWeek.bind(this)
+        this.today = this.today.bind(this)
     }
     
     nextWeek(){
@@ -53,10 +54,16 @@ class CalendarWeek extends React.Component {
             return { sunday, saturday }
         })
     }
+    
+    today(){
+        this.setState(prevState => ({ sunday: prevState.todaySunday, saturday: prevState.todaySaturday }))
+    }
 
     render = () => (
         <Flex as='main' justify='center' mr='9%' my='2%'>
-            <WeekControls style={{position: 'absolute', left: '5%'}} nextWeek={this.nextWeek} pastWeek={this.pastWeek}/>
+            <WeekControls style={{position: 'absolute', right: '12%'}} nextWeek={this.nextWeek} pastWeek={this.pastWeek}/>
+        
+            <Button position='absolute' right='5%' onClick={this.today} variant='solid'>Today</Button>
         
             <NewEventButton style={{position:'fixed', right:'3%', bottom:'5%', colorScheme:'blue'}}/>
 
