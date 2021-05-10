@@ -5,9 +5,9 @@ const getTime = date => date.toString().replace(/.+?(\d{2}:\d{2}).+/,'$1')
 
 class CalendarItem extends React.Component {
     render = () => {
-        const { event, key, duration, rowStart, colStart, style } = this.props
-        const time = `${getTime(event.startDate)} - ${getTime(event.endDate)}`
-        const title = `${event.title} ${time}`
+        const { event: e, key, duration, rowStart, colStart, style } = this.props
+        const time = `${getTime(e.startDate)} - ${getTime(e.endDate)}`
+        const title = `${e.title} ${time}`
         
         return (
             <GridItem key={key} rowSpan={duration} colSpan={1} rowStart={rowStart} colStart={colStart} {...style} m='0px' padding='2%' pr='4%' zIndex={1} h='100%' w='200px'>
@@ -25,7 +25,7 @@ class CalendarItem extends React.Component {
                         justify='top' w='100%' h='100%' 
                         overflow='hidden' p='1%'
                     >
-                        <Heading as='h6' size='xs' minW='0%' maxW='100%' flexShrink={1} isTruncated>{event.title}</Heading>
+                        <Heading as='h6' size='xs' minW='0%' maxW='100%' flexShrink={1} isTruncated>{e.title}</Heading>
                         <Text fontSize='xs' minW='40%' flexShrink={0}>{time}</Text>
                     </Stack>
                 </Box>
