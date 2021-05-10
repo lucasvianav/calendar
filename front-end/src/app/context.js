@@ -55,7 +55,11 @@ export class DataProvider extends React.Component {
         const r = (await api.get(`/events/${this.state._id}`)).data
         
         if(r.status === 200 || r.status === 404){
-            this.setState({events: r.events})
+            this.setState({events: r.events.map(e => {
+                e.startDate = new Date(e.startDate)
+                e.endDate = new Date(e.endDate)
+                return e
+            })})
         }
         
         else if(r.status === 401){
