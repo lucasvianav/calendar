@@ -8,7 +8,7 @@ class NewEventButton extends React.Component {
     constructor(props){
         super(props)
 
-        this.state = { isModalOpen: false }
+        this.state = { isModalOpen: true }
         
         this.toggleModal = this.toggleModal.bind(this)
     }
