@@ -22,6 +22,9 @@ export class DataProvider extends React.Component {
         this.fetchUser = this.fetchUser.bind(this)
         this.hasUserData = this.hasUserData.bind(this)
         this.fetchAllData = this.fetchAllData.bind(this)
+        this.createEvent = this.createEvent.bind(this)
+        this.getTime = this.getTime.bind(this)
+        this.getDate = this.getDate.bind(this)
     }
     
     async signin(email, password){
@@ -108,13 +111,58 @@ export class DataProvider extends React.Component {
 
         return !(pw.includes(' ') || !pwRegex.test(pw))
     }
+    
+    async createEvent(title, description, startDate, endDate, guests){
+        const r = (await api.post(`/events/${this.state._id}`, { title, description, startDate, endDate, guests })).data
+        
+        if(r.status === 200){
+            // this.setState(prevState => ( { events: [ ...prevState.events.map(e => ({...e})), r.event ] }))
+
+            // this.setState(prevState => (
+            //     { events: [
+            //         ...prevState.events.map(e => ({
+            //             title: e.title,
+            //             description: e.description,
+            //             _id: e._id,
+            //             creator: e.creator,
+            //             guests: [...e.guests.map(g => ({...g}))],
+            //             startDate: new Date(e.startDate),
+            //             endDate: new Date(e.endDate)
+            //         })), r.event 
+            //     ] }
+            // ))
+
+            await this.fetchEvents()
+        }
+        
+        else if(r.status === 401){
+            this.signout()
+        }
+        
+        return r
+    }
+    
+    getTime(startDate, endDate){
+        const formatTime = date => new Date(date).toString().replace(/.+?(\d{2}:\d{2}).+/,'$1')
+        return `${formatTime(startDate)} - ${formatTime(endDate)}`
+    } 
+    
+    getDate(startDate, endDate){
+        // formats time as: DAY (dd/mm) XX:YY
+        const formatTime = date => date.toString().replace(
+            /^(\S{3}).+?(\d{2}).+?(\d{2}:\d{2}).+/,
+            `$1 ($2/${String(date.getMonth()+1).padStart(2,0)}) $3`
+        )
+
+        return `${formatTime(startDate)} - ${formatTime(endDate)}`
+    }
 
     render = () => {
         const { name, email, events } = this.state
-        const { signin, signup, signout, validatePw, fetchEvents, fetchUser, hasUserData, fetchAllData } = this
+        const { signin, signup, signout, validatePw, fetchEvents, fetchUser, hasUserData, fetchAllData, createEvent, getTime, getDate } = this
 
         return(
-            <DataContext.Provider value={{ name, email, events, signin, signup, signout, validatePw, fetchEvents, fetchUser, hasUserData, fetchAllData }}>
+            <DataContext.Provider value={{ name, email, events, signin, signup, signout, validatePw, fetchEvents, fetchUser, hasUserData, fetchAllData, createEvent, getTime, getDate }}>
                 {this.props.children}
             </DataContext.Provider>
         )

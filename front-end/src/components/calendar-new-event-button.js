@@ -8,7 +8,7 @@ class NewEventButton extends React.Component {
     constructor(props){
         super(props)
 
-        this.state = { isModalOpen: true }
+        this.state = { isModalOpen: false }
         
         this.toggleModal = this.toggleModal.bind(this)
     }
@@ -23,7 +23,7 @@ class NewEventButton extends React.Component {
     render = () => (
         <>
             <Button {...this.props.style} onClick={this.toggleModal} variant='ghost'><BsPlusCircleFill fontSize='35px'/></Button>
-            <NewEventModal isOpen={this.state.isModalOpen} onClose={this.toggleModal}/>
+            <NewEventModal isOpen={this.state.isModalOpen} onClose={this.toggleModal} refresh={this.props.refresh}/>
         </>
     )
 }

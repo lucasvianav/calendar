@@ -20,9 +20,11 @@ class CalendarWeek extends React.Component {
 
         const sunday = new Date()
         while(sunday.getDay() > 0){ sunday.setDate(sunday.getDate()-1) }
+        sunday.setHours(0, 0, 0, 0)
         
         const saturday = new Date(sunday)
         saturday.setDate(saturday.getDate() + 6)
+        saturday.setHours(23, 59, 59, 999)
 
         this.state = { sunday, saturday, todaySunday: new Date(sunday), todaySaturday: new Date(saturday) }
         

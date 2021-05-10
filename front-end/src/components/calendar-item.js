@@ -1,12 +1,13 @@
 import React from 'react'
 import { GridItem, Stack, Box, Text, Heading } from '@chakra-ui/layout'
-
-const getTime = date => date.toString().replace(/.+?(\d{2}:\d{2}).+/,'$1')
+import { DataContext } from '../app/context'
 
 class CalendarItem extends React.Component {
+    static contextType = DataContext
+
     render = () => {
         const { event: e, key: k, duration, rowStart, colStart, style } = this.props
-        const time = `${getTime(e.startDate)} - ${getTime(e.endDate)}`
+        const time = this.context.getTime(e.startDate, e.endDate)
         const title = `${e.title} ${time}`
         
         return (
@@ -20,8 +21,8 @@ class CalendarItem extends React.Component {
                     title={title}
                 >
                     <Stack
-                        key={k}
-                        direction='column' wrap='wrap' spacing='0'
+                        key={k} spacing={0}
+                        direction='column' wrap='wrap'
                         justify='top' w='100%' h='100%' 
                         overflow='hidden' p='1%'
                     >
