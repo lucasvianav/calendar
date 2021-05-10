@@ -4,25 +4,28 @@ const eventController = {
     create: async (req, res) => {
         const {userId} = req.params
         const {title, description, startDate, endDate, guests} = req.body
-        const {newEvent, error} = await eventService.create(title, description, startDate, endDate, userId, guests)
 
-        return res.status(200).json(newEvent ? newEvent : error)
+        const r = await eventService.create(title, description, startDate, endDate, userId, guests)
+
+        return res.status(200).json(r)
     },
 
     update: async(req, res) => {
         const {userId, eventId} = req.params
         const {edits} = req.body
-        const {newEvent, error} = await eventService.update(userId, eventId, edits)
 
-        return res.status(200).json(newEvent ? newEvent : error)
+        const r = await eventService.update(userId, eventId, edits)
+
+        return res.status(200).json(r)
     },
     
     rsvp: async (req, res) => {
         const {guestId, eventId} = req.params
         const {bool} = req.body
-        const response = eventService.rsvp(guestId, eventId, bool)
 
-        return res.status(200).json(response)
+        const r = eventService.rsvp(guestId, eventId, bool)
+
+        return res.status(200).json(r)
     },
 
     find: async (req, res) => { 

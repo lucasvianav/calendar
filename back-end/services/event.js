@@ -5,14 +5,12 @@ const eventService = {
     create: async (title, description, startDate, endDate, creator, guests) => {
         // if the event is supposed to start in the past or it's 
         // duration is lower than 5 minutes, it's invalid
-        if(new Date(startDate) < new Date() || new Date(endDate) - new Date(startDate) < 5*60*1000){
+        if(new Date(endDate) - new Date(startDate) < 5*60*1000){
             return {
-                newEvent: null,
-                error: {
-                    status: 400,
-                    message: 'The event could not be created because it\'s dates are invalid. A new event cannot start in the past nor last less than 5 minutes.', 
-                    overlaps: [] 
-                }
+                event: null,
+                status: 400, // bad request
+                message: 'The event could not be created because it\'s dates are invalid. A new event last more than 5 minutes.', 
+                overlaps: [] 
             }
         }
 
@@ -52,12 +50,10 @@ const eventService = {
         // if any overlap is found
         if(overlaps.length){
             return {
-                newEvent: null,
-                error: {
-                    status: 409, // conflict
-                    message: 'The event could not be created because it overlaps with existing events.',
-                    overlaps 
-                }
+                event: null,
+                status: 409, // conflict
+                message: 'The event could not be created because it overlaps with existing events.',
+                overlaps 
             }
         }
 
@@ -71,18 +67,16 @@ const eventService = {
         const returnValue = {}
 
         try {
-            returnValue.newEvent = await Event.create({ title, description, startDate, endDate, creator, guests })
-            returnValue.error = null
+            returnValue.event = await Event.create({ title, description, startDate, endDate, creator, guests })
+            returnValue.status = 200
         } 
 
         // if an error occurs, it means one of the event's fields if invalid
         catch(e){
-            returnValue.newEvent = null
-            returnValue.error = {
-                status: 400, // bad request
-                message: 'An error ocurred.', 
-                overlaps             
-            }
+            returnValue.event = null
+            returnValue.status = 400
+            returnValue.message = 'An error ocurred.' 
+            returnValue.overlaps = overlaps
 
             // logs error
             console.log(e)
@@ -95,24 +89,20 @@ const eventService = {
     update: async(userId, eventId, edits) => {
         const oldEvent = await Event.findById(eventId)
 
-        // if the event is supposed to start in the past or it's 
-        // duration is lower than 5 minutes, it's invalid
+        // if the event's duration is lower than 5 minutes, it's invalid
         // edits.startDate || oldEvent.startDate --> the new date or the old one if there's no new date
         // edits.endDate || oldEvent.endDate --> the new date or the old one if there's no new date
         if(
             (edits.startDate || edits.endDate) &&
             (
-                new Date(edits.startDate || oldEvent.startDate) < new Date() || 
                 new Date(edits.endDate || oldEvent.endDate) - new Date(edits.startDate || oldEvent.startDate) < 5*60*1000
             )
         ){
             return {
-                newEvent: null,
-                error: {
-                    status: 400,
-                    message: 'The event could not be created because it\'s dates are invalid. A new event cannot start in the past nor last less than 5 minutes.', 
-                    overlaps: [] 
-                }
+                event: null,
+                status: 400,
+                message: 'The event could not be created because it\'s dates are invalid. A new event cannot start in the past nor last less than 5 minutes.', 
+                overlaps: [] 
             }
         }
 
@@ -157,12 +147,10 @@ const eventService = {
 
         // if any overlap is found
         if(overlaps.length){
-            returnValue.newEvent = null
-            returnValue.error = {
-                status: 409, // conflict
-                message: 'The event could not be edited because it would overlap with other events.', 
-                overlaps 
-            }
+            returnValue.event = null
+            returnValue.status = 409, // conflict
+            returnValue.message = 'The event could not be edited because it would overlap with other events.', 
+            returnValue.overlaps = overlaps
         }
 
         else{
@@ -196,7 +184,7 @@ const eventService = {
                 const targetEvent = await Event.findById(eventId)
 
                 if(targetEvent){
-                    returnValue.newEvent = await Event.findByIdAndUpdate(eventId, {
+                    returnValue.event = await Event.findByIdAndUpdate(eventId, {
                         // updates non-list variables
                         $set: { ...updates.set }, 
 
@@ -206,7 +194,7 @@ const eventService = {
                     
                     // removes guests from the array (if there are any to remove)
                     if(updates.guests.remove.length){
-                        returnValue.newEvent = await Event.findByIdAndUpdate(eventId, {
+                        returnValue.event = await Event.findByIdAndUpdate(eventId, {
                             $pull: {
                                 guests: { 
                                     _id: { $in: updates.guests.remove } 
@@ -215,26 +203,22 @@ const eventService = {
                         }, { new: true })
                     }
                     
-                    returnValue.error = null
+                    returnValue.status = 200
                 }
                 
                 else{
-                    returnValue.newEvent = null
-                    returnValue.error = {
-                        status: 404,
-                        message: 'Unfortunately, this event was not found.' 
-                    }
+                    returnValue.event = null
+                    returnValue.status = 404,
+                    returnValue.message = 'Unfortunately, this event was not found.' 
                 }
             } 
 
             // if an error occurs, it means one of the event's fields if invalid
             catch(e){
                 returnValue.newEvent = null
-                returnValue.error = {
-                    status: 400, // bad request
-                    message: 'An error ocurred.', 
-                    overlaps 
-                }
+                returnValue.status = 400, // bad request
+                returnValue.message = 'An error ocurred.', 
+                returnValue.overlaps = overlaps
 
                 // logs error
                 console.log(e)
