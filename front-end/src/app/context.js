@@ -23,6 +23,8 @@ export class DataProvider extends React.Component {
         this.hasUserData = this.hasUserData.bind(this)
         this.fetchAllData = this.fetchAllData.bind(this)
         this.createEvent = this.createEvent.bind(this)
+        this.editEvent = this.editEvent.bind(this)
+        this.deleteEvent = this.deleteEvent.bind(this)
         this.getTime = this.getTime.bind(this)
         this.getDate = this.getDate.bind(this)
     }
@@ -142,6 +144,28 @@ export class DataProvider extends React.Component {
         return r
     }
     
+    async editEvent(edits, _id){
+        const r = (await api.put(`/events/${this.state._id}/${_id}`, { edits })).data
+        
+        if(r.status === 200){ 
+            this.setState({events: []})
+            await this.fetchEvents() 
+        }
+
+        else if(r.status === 401){ this.signout() }
+        
+        return r
+    }
+    
+    async deleteEvent(_id){
+        const r = (await api.delete(`/events/${this.state._id}/${_id}`)).data
+
+        if(r.status === 200){ await this.fetchEvents() }
+        else if(r.status === 401){ this.signout() }
+
+        return r
+    }
+
     getTime(startDate, endDate){
         const formatTime = date => new Date(date).toString().replace(/.+?(\d{2}:\d{2}).+/,'$1')
         return `${formatTime(startDate)} - ${formatTime(endDate)}`
@@ -159,10 +183,10 @@ export class DataProvider extends React.Component {
 
     render = () => {
         const { name, email, events } = this.state
-        const { signin, signup, signout, validatePw, fetchEvents, fetchUser, hasUserData, fetchAllData, createEvent, getTime, getDate } = this
+        const { signin, signup, signout, validatePw, fetchEvents, fetchUser, hasUserData, fetchAllData, createEvent, editEvent, deleteEvent, getTime, getDate } = this
 
         return(
-            <DataContext.Provider value={{ name, email, events, signin, signup, signout, validatePw, fetchEvents, fetchUser, hasUserData, fetchAllData, createEvent, getTime, getDate }}>
+            <DataContext.Provider value={{ name, email, events, signin, signup, signout, validatePw, fetchEvents, fetchUser, hasUserData, fetchAllData, createEvent, editEvent, deleteEvent, getTime, getDate }}>
                 {this.props.children}
             </DataContext.Provider>
         )

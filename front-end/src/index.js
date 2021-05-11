@@ -1,18 +1,7 @@
+import { ChakraProvider } from '@chakra-ui/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
 
-import { ChakraProvider, extendTheme, ColorModeScript } from '@chakra-ui/react'
 
-const theme = extendTheme({ useSystemColorMode: true })
-
-ReactDOM.render(
-    // <ChakraProvider theme={theme}>
-    <ChakraProvider>
-    <App/>
-        {/* <ColorModeScript>
-            <App/>
-        </ColorModeScript> */}
-    </ChakraProvider>, 
-
-    document.getElementById('root'));
+ReactDOM.render(<ChakraProvider><App/></ChakraProvider>, document.getElementById('root'));

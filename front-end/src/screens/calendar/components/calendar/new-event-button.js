@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/button'
 import React from 'react'
 import { BsPlusCircleFill } from 'react-icons/bs'
-import NewEventModal from './new-event-modal'
+import EventFormsModal from './event-forms-modal'
 
 class NewEventButton extends React.Component {
     constructor(props){
@@ -19,7 +19,7 @@ class NewEventButton extends React.Component {
     render = () => (
         <>
             <Button {...this.props.style} onClick={this.toggleModal} variant='ghost'><BsPlusCircleFill fontSize='35px'/></Button>
-            <NewEventModal isOpen={this.state.isModalOpen} onClose={this.toggleModal} refresh={this.props.refresh}/>
+            <EventFormsModal isOpen={this.state.isModalOpen} onClose={this.toggleModal} create/>
         </>
     )
 }

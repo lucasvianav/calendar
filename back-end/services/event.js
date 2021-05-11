@@ -9,7 +9,7 @@ const eventService = {
             return {
                 event: null,
                 status: 400, // bad request
-                message: 'The event could not be created because it\'s dates are invalid. A new event last more than 5 minutes.', 
+                message: 'The event could not be created because it\'s dates are invalid. An event must last more than 5 minutes.', 
                 overlaps: [] 
             }
         }
@@ -101,7 +101,7 @@ const eventService = {
             return {
                 event: null,
                 status: 400,
-                message: 'The event could not be created because it\'s dates are invalid. A new event cannot start in the past nor last less than 5 minutes.', 
+                message: 'The event could not be created because it\'s dates are invalid. An event must last more than 5 minutes.', 
                 overlaps: [] 
             }
         }
