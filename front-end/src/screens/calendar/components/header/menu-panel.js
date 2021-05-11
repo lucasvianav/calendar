@@ -19,13 +19,10 @@ class MenuPanel extends React.Component {
     }
 
     render = () => (
-        <Box display={{ base: 'none', md: 'block' }}>
+        <Box>
             <Stack 
-                direction={['column', 'row', 'row', 'row']} 
-                spacing='8' 
-                align='center' 
-                justify={['center', 'space-between', 'flex-end', 'flex-end']}
-                p={[4, 4, 0, 0]}
+                direction={['column', 'row', 'row', 'row']} spacing='8' align='center' p={[4, 4, 0, 0]}
+                justify={['center', 'space-between', 'flex-end', 'flex-end']} display={{ base: 'none', md: 'flex' }}
             >
                 <VStack spacing='1%' textAlign='right' userSelect='none'>
                     <Heading as='h4' size='md'>{this.context.name}</Heading>
@@ -34,6 +31,8 @@ class MenuPanel extends React.Component {
             
                 <Button onClick={this.signout} variant='ghost'> <FiLogOut/> </Button>
             </Stack>
+
+            <Button onClick={this.signout} variant='ghost' display={{ base: 'block', md: 'none' }}> <FiLogOut/> </Button>
         </Box>
     )
 }

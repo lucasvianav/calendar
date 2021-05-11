@@ -7,7 +7,7 @@ class Menu extends React.Component {
     render = () => (
         <>
             <MenuSandwichToggle toggle={this.props.toggle} isOpen={this.props.isOpen}/>
-            <MenuPanel toggle={this.props.toggle} isOpen={this.props.isOpen}/>
+            <MenuPanel/>
         </>
     )
 }
