@@ -1,6 +1,6 @@
 # calendar
 ![calendar logo](/github-images/logo.gif)\
-This is a Google Calendar clone I developed in 1 week.
+This is a Google Calendar clone I developed in 1 week. Because of the limited time, functionality was prioritized over design (which is not great, despite the charismatic word art logo).
 
 ## Summary
   1.  [Stack](#stack)
