@@ -63,13 +63,16 @@ class CalendarWeek extends React.Component {
 
     render = () => (
         <Flex as='main' justify='center' mr='9%' my='2%'>
-            <WeekControls style={{position: 'absolute', right: '12%'}} nextWeek={this.nextWeek} pastWeek={this.pastWeek}/>
+            <WeekControls style={{position: 'absolute', right: {base: '27%', md: '12%'}}} nextWeek={this.nextWeek} pastWeek={this.pastWeek}/>
         
             <Button position='absolute' right='5%' onClick={this.today} variant='solid'>Today</Button>
         
             <NewEventButton style={{position:'fixed', right:'3%', bottom:'5%', colorScheme:'blue'}}/>
 
-            <Grid templateRows={`repeat(${minutesInDay+1}, 1fr)`} templateColumns='repeat(8, 1fr)' p={[0, 2, 0, 2]} mt='3%' w='100%' h='1250px' gap={0}>
+            <Grid
+                templateRows={`repeat(${minutesInDay+1}, 1fr)`} templateColumns='repeat(8, 1fr)'
+                p={[0, 2, 0, 2]} mt={{base: '15%', md: '3%'}} w='100%' h={{base: '1800px', xl: '1250px'}} gap={0}
+            >
                 {/* sets up calendar grid (borders) */}
                 <CalendarGrid/>
 

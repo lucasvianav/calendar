@@ -28,7 +28,7 @@ class CalendarItem extends React.Component {
                 <GridItem
                     key={k} 
                     rowSpan={duration} colSpan={1} rowStart={rowStart} colStart={colStart}
-                    {...style} m='0px' padding='2%' pr='4%' zIndex={1} h='100%' w='200px'
+                    {...style} m='0px' padding='2%' pr='4%' zIndex={1} h='100%' w={{base: '40px', xl: '200px'}}
                 >
                     <Box
                         key={k} backgroundColor="orange.500"
@@ -40,8 +40,8 @@ class CalendarItem extends React.Component {
                             key={k} spacing={0} direction='column' wrap='wrap'
                             justify='top' w='100%' h='100%' overflow='hidden' p='1%'
                         >
-                            <Heading as='h6' size='xs' minW='0' flexShrink={1} isTruncated>{e.title}</Heading>
-                            <Text fontSize='xs' minW='40%' flexShrink={0}>{time}</Text>
+                            <Heading as='h6' size='xs' fontSize={{base: '11px', xl: '14px'}} minW='0' flexShrink={1} wordBreak={{base: 'break-all', xl: 'normal'}} isTruncated={{base: false, xl: true}}>{e.title}</Heading>
+                            <Text fontSize='xs' minW='40%' display={{base: 'none', xl: 'initial'}} flexShrink={0}>{time}</Text>
                         </Stack>
                     </Box>
                 </GridItem>

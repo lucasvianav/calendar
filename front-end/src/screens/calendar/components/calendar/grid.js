@@ -10,7 +10,7 @@ class CalendarGrid extends React.Component {
                     rowSpan={60} colSpan={1} key={i + Math.random()}
                     rowStart={parseInt(i/7)*60+2} colStart={i%7+2} 
                     borderX='1px' borderY='1px' borderColor='gray.300' 
-                    m='0px' padding='1%' w='220px'
+                    m='0px' padding='1%' w={{base: '50px', xl: '220px'}}
                 />
             ))
         }
