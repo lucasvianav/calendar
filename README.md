@@ -64,7 +64,7 @@ By clicking any event card, the user is able open another modal dialog in which 
 ### Multiple-day events
 The app support multiple day events (no limitation), although it glitches when an event lasts through multiple weeks.
 
-![Multiple-day events example](github-images/Peek 2021-05-11 00-14.gif)
+![Multiple-day events example](github-images/2021-05-11_00-14.gif)
 
 ### Non-overlapping events
 The app won't let you create an event that has a time conflict with an existing one, raising a warning. It's also impossible to edit an event to create an overlap.
