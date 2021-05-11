@@ -1,4 +1,4 @@
-import { Flex, Grid } from '@chakra-ui/layout'
+import { Flex, Grid, Heading } from '@chakra-ui/layout'
 import React from 'react'
 import { DataContext } from '../../../../app/context'
 import CalendarDates from './dates'
@@ -25,8 +25,16 @@ class CalendarWeek extends React.Component {
         const saturday = new Date(sunday)
         saturday.setDate(saturday.getDate() + 6)
         saturday.setHours(23, 59, 59, 999)
+        
+        const monthSunday = sunday.toString().replace(/^\S{3}\s(\S{3}).+?(\d{4}).+$/, '$1 $2')
+        const monthSaturday = saturday.toString().replace(/^\S{3}\s(\S{3}).+?(\d{4}).+$/, '$1 $2')
 
-        this.state = { sunday, saturday, todaySunday: new Date(sunday), todaySaturday: new Date(saturday) }
+        this.state = { 
+            sunday, saturday, 
+            todaySunday: new Date(sunday), todaySaturday: new Date(saturday), 
+            monthSunday, monthSaturday,
+            todayMonthSunday: monthSunday, todayMonthSaturday: monthSaturday
+        }
         
         this.nextWeek = this.nextWeek.bind(this)
         this.pastWeek = this.pastWeek.bind(this)
@@ -40,8 +48,11 @@ class CalendarWeek extends React.Component {
             
             const saturday = new Date(prevState.saturday)
             saturday.setDate(saturday.getDate() + 7)
+
+            const monthSunday = sunday.toString().replace(/^\S{3}\s(\S{3}).+?(\d{4}).+$/, '$1 $2')
+            const monthSaturday = saturday.toString().replace(/^\S{3}\s(\S{3}).+?(\d{4}).+$/, '$1 $2')
             
-            return { sunday, saturday }
+            return { sunday, saturday, monthSunday, monthSaturday }
         })
     }
 
@@ -52,13 +63,19 @@ class CalendarWeek extends React.Component {
             
             const saturday = new Date(prevState.saturday)
             saturday.setDate(saturday.getDate() - 7)
-            
-            return { sunday, saturday }
+
+            const monthSunday = sunday.toString().replace(/^\S{3}\s(\S{3}).+?(\d{4}).+$/, '$1 $2')
+            const monthSaturday = saturday.toString().replace(/^\S{3}\s(\S{3}).+?(\d{4}).+$/, '$1 $2')
+
+            return { sunday, saturday, monthSunday, monthSaturday }
         })
     }
     
     today(){
-        this.setState(prevState => ({ sunday: prevState.todaySunday, saturday: prevState.todaySaturday }))
+        this.setState(prevState => ({ 
+            sunday: prevState.todaySunday, saturday: prevState.todaySaturday,
+            monthSunday: prevState.todayMonthSunday, monthSaturday: prevState.todayMonthSaturday
+        }))
     }
 
     render = () => (
@@ -83,7 +100,7 @@ class CalendarWeek extends React.Component {
                 <CalendarTimes/>
 
                 {/* sets up calendar dates */}
-                <CalendarDates sunday={this.state.sunday}/>
+                <CalendarDates sunday={this.state.sunday} monthSunday={this.state.monthSunday} monthSaturday={this.state.monthSaturday}/>
         
                 {
                     this.context.events

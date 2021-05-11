@@ -40,7 +40,10 @@ class CalendarItem extends React.Component {
                             key={k} spacing={0} direction='column' wrap='wrap'
                             justify='top' w='100%' h='100%' overflow='hidden' p='1%'
                         >
-                            <Heading as='h6' size='xs' fontSize={{base: '11px', xl: '14px'}} minW='0' flexShrink={1} wordBreak={{base: 'break-all', xl: 'normal'}} isTruncated={{base: false, xl: true}}>{e.title}</Heading>
+                            <Heading
+                                as='h6' size='xs' fontSize={{base: '11px', xl: '14px'}} minW='0' maxW='100%' flexShrink={1}
+                                wordBreak={{base: 'break-all', xl: 'normal'}} isTruncated={{base: false, xl: true}}
+                            > {e.title} </Heading>
                             <Text fontSize='xs' minW='40%' display={{base: 'none', xl: 'initial'}} flexShrink={0}>{time}</Text>
                         </Stack>
                     </Box>
