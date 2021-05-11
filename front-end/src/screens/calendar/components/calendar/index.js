@@ -1,14 +1,14 @@
-import { Flex, Grid, Heading } from '@chakra-ui/layout'
+import { Button } from '@chakra-ui/button'
+import { Flex, Grid } from '@chakra-ui/layout'
 import React from 'react'
 import { DataContext } from '../../../../app/context'
 import CalendarDates from './dates'
 import CalendarEvent from './event'
 import CalendarGrid from './grid'
+import NewEventButton from './new-event-button'
 import CalendarTimes from './times'
 import CalendarTodayHighlight from './today-highlight'
 import WeekControls from './week-controls'
-import { Button } from '@chakra-ui/button'
-import NewEventButton from './new-event-button'
 
 const minutesInDay = 60*24
 
