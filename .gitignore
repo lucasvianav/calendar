@@ -1,4 +1,5 @@
 .env
+credentials.json
 
 # Logs
 logs
