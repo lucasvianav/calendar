@@ -58,7 +58,7 @@ export class DataProvider extends React.Component {
     }
 
     async fetchEvents(){
-        const r = (await api.get(`/events/${this.state._id}`)).data
+        const r = (await api.get(`/events/${this.state._id}`, { headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')) } })).data
         
         if(r.status === 200 || r.status === 404){
             this.setState({events: r.events.map(e => {
@@ -76,9 +76,8 @@ export class DataProvider extends React.Component {
     }
 
     async fetchUser(){
-        JSON.parse(localStorage.getItem('jwt'))
-
-        const r = (await api.get('/auth/')).data
+        const r = (await api.get('/auth/', { headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('jwt')) } })).data
+        console.log(r)
         
         if(r.status === 200){
             const { name, email, _id } = r
@@ -98,7 +97,7 @@ export class DataProvider extends React.Component {
     }
     
     hasUserData(){
-        return Boolean(this.state.name && this.state.email && this.state._id)
+        return Boolean(this.state.name && this.state.email && this.state._id && JSON.parse(localStorage.getItem('jwt')))
     }
 
     validatePw(pw){

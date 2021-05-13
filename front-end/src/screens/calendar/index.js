@@ -16,7 +16,8 @@ class Calendar extends React.Component {
     }
     
     async componentDidMount(){
-        const r = await this.context.fetchAllData()
+        // const r = !this.context.hasUserData() ? await this.context.fetchAllData() : await this.context.fetchEvents()
+        const r = await this.context.fetchAllData() 
 
         if(r.status === 401){ 
             alert(r.message)
